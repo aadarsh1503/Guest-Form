@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Form = () => {
     const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ const Form = () => {
     });
 
     const [errors, setErrors] = useState({});
-    const [submittedData, setSubmittedData] = useState(null); // New state for submitted data
+    const [submittedData, setSubmittedData] = useState(null);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -36,21 +36,22 @@ const Form = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            setSubmittedData(formData); // Set the submitted data
-            setFormData({
-                name: '',
-                email: '',
-                age: '',
-                attendingWithGuest: No,
-                guestName: ''
-            });
+            setSubmittedData(formData);
         }
     };
 
+    useEffect(() => {
+        if (submittedData) {
+            // You can perform any additional actions here after form submission
+            console.log('Form submitted successfully', submittedData);
+        }
+    }, [submittedData]);
+
     return (
-        
+          
         <div className="h-100 p-7 gap-2 rounded-lg text-xl font-medium bg-white my-4 flex flex-col items-center justify-center">
             <h2 className="text-2xl font-bold mb-4">EVENT REGISTRATION FORM </h2>
+            
             <form onSubmit={handleSubmit} className="w-full max-w-md bg-red-100 p-6 rounded-lg">
                 <div className="mb-4">
                     <label htmlFor="name" className="block text-gray-700">Name</label>
@@ -86,13 +87,17 @@ const Form = () => {
             </form>
 
             {submittedData && (
-                <div className="mt-20 w-100 max-w-100 bg-green-800 p-2 rounded-lg">
-                    <h2 className="text-2xl font-bold mb-4">Submitted Data</h2>
-                    <pre className=" bg-gray-200 h-100 p-4 rounded">{JSON.stringify(submittedData, null, 2)}</pre>
+                <div className="mt-8 h-80 w-full max-w-md bg-green-100 p-6 rounded-lg">
+                    <h1 className="text-2xl mb-4">Form Data</h1>
+                    <p><strong>Name:</strong> {submittedData.name}</p>
+                    <p><strong>Email:</strong> {submittedData.email}</p>
+                    <p><strong>Age:</strong> {submittedData.age}</p>
+                    <p><strong>Attending with Guest:</strong> {submittedData.attendingWithGuest ? 'Yes' : 'No'}</p>
+                    {submittedData.attendingWithGuest && <p><strong>Guest Name:</strong> {submittedData.guestName}</p>}
                 </div>
             )}
         </div>
     );
 };
 
-export default Form;
+export default Form;
