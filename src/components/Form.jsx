@@ -10,6 +10,7 @@ const Form = () => {
     });
 
     const [errors, setErrors] = useState({});
+    const [submittedData, setSubmittedData] = useState(null); // New state for submitted data
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -35,12 +36,21 @@ const Form = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            alert(JSON.stringify(formData, null, 2));
+            setSubmittedData(formData); // Set the submitted data
+            setFormData({
+                name: '',
+                email: '',
+                age: '',
+                attendingWithGuest: No,
+                guestName: ''
+            });
         }
     };
 
     return (
-        <div className="h-100 p-7 gap-2 rounded-lg text-xl font-medium bg-white my-4 flex items-center justify-center">
+        
+        <div className="h-100 p-7 gap-2 rounded-lg text-xl font-medium bg-white my-4 flex flex-col items-center justify-center">
+            <h2 className="text-2xl font-bold mb-4">EVENT REGISTRATION FORM </h2>
             <form onSubmit={handleSubmit} className="w-full max-w-md bg-red-100 p-6 rounded-lg">
                 <div className="mb-4">
                     <label htmlFor="name" className="block text-gray-700">Name</label>
@@ -74,8 +84,15 @@ const Form = () => {
                     <button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
                 </div>
             </form>
+
+            {submittedData && (
+                <div className="mt-20 w-100 max-w-100 bg-green-800 p-2 rounded-lg">
+                    <h2 className="text-2xl font-bold mb-4">Submitted Data</h2>
+                    <pre className=" bg-gray-200 h-100 p-4 rounded">{JSON.stringify(submittedData, null, 2)}</pre>
+                </div>
+            )}
         </div>
     );
 };
 
-export default Form;
+export default Form;
